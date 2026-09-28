@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Convite de Casamento Interativo</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Elegant Calligraphic Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Typography Rules */
+        .font-script {
+            font-family: 'Alex Brush', 'Great Vibes', cursive;
+        }
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .font-serif-luxury {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Gold Foil Metallic Gradient for Text */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #7A5B22 0%, #B89033 25%, #E3CB7A 50%, #B58E32 75%, #6B4E1B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(0px 1px 1px rgba(255, 255, 255, 0.6));
+        }
+
+        /* Highlight style when editing text */
+        .editing-active [contenteditable="true"] {
+            outline: 2px dashed #b58e32 !important;
+            outline-offset: 3px;
+            background-color: rgba(255, 255, 255, 0.85) !important;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: #5c4214 !important;
+            -webkit-text-fill-color: initial !important;
+            cursor: text;
+        }
+
+        /* Hand pulse animation */
+        @keyframes tapHand {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(5px) scale(0.92); }
+        }
+        .animate-tap {
+            animation: tapHand 1.4s infinite ease-in-out;
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-ring {
+            animation: pulseRing 2s infinite ease-in-out;
+        }
+
+        /* Scrollbar cleanup */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="bg-stone-900 flex items-center justify-center min-h-[100dvh] w-full font-serif-luxury antialiased select-none p-0 sm:p-4 overflow-hidden">
+
+    <!-- Mobile Frame Container -->
+    <main class="relative w-full max-w-[450px] h-[100dvh] sm:h-[880px] bg-stone-100 shadow-2xl overflow-hidden flex flex-col justify-between sm:rounded-3xl border-0 border-amber-900/10">
+
+        <!-- 1. BACKGROUND: ENVELOPE WITH WAX SEAL (envelope.jpg) -->
+        <div class="absolute inset-0 w-full h-full z-0">
+            <img 
+                src="envelope.jpg" 
+                alt="Envelope de Casamento" 
+                class="w-full h-full object-cover object-center"
+            />
+        </div>
+
+        <!-- 2. EDITING TOOLBAR CONTROLS -->
+        <div class="absolute top-3 left-0 right-0 z-40 px-4 flex justify-between items-center pointer-events-none">
+            <!-- Edit Mode Status Badge -->
+            <div id="editBadge" class="hidden pointer-events-auto bg-amber-900/90 text-amber-100 text-[11px] px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md items-center gap-1.5 border border-amber-500/40 font-sans">
+                <i class="fa-solid fa-pen-to-square text-amber-300"></i>
+                <span class="font-medium tracking-wide">Modo Edição Ativo</span>
+            </div>
+
+            <!-- Toggle Edit Button -->
+            <button id="toggleEditBtn" onclick="toggleEditMode()" class="pointer-events-auto ml-auto bg-white/90 hover:bg-white text-amber-950 text-xs font-sans px-3.5 py-1.5 rounded-full shadow-xl backdrop-blur-md border border-amber-300/80 flex items-center gap-2 transition-all duration-300 hover:scale-105 active:scale-95">
+                <i id="editIcon" class="fa-solid fa-pen text-amber-700"></i>
+                <span id="editBtnText" class="font-semibold">Editar Textos</span>
+            </button>
+        </div>
+
+        <!-- 3. OVERLAY CONTENT LAYER (Wreath, Arabesques, and Editable Text) -->
+        <div class="relative w-full h-full z-10 flex flex-col justify-between pointer-events-none px-4">
+            
+            <!-- UPPER SECTION: Guirlanda, Monograma, Subtítulo e Arabesco 2 -->
+            <div class="w-full pt-[8%] flex flex-col items-center text-center">
+                
+                <!-- WREATH / BRASÃO CONTAINER (braãso.jpg) -->
+                <div class="relative w-[280px] sm:w-[310px] aspect-square flex items-center justify-center">
+                    <img 
+                        src="braãso.jpg" 
+                        alt="Guirlanda do Monograma" 
+                        class="absolute inset-0 w-full h-full object-contain mix-blend-multiply pointer-events-none"
+                    />
+                    
+                    <!-- INITIALS / MONOGRAM (Editable) -->
+                    <div class="relative z-10 pointer-events-auto mt-[-10px]">
+                        <h1 id="monogramText" contenteditable="false" spellcheck="false" class="font-script text-6xl sm:text-7xl gold-gradient-text px-4 py-1 leading-none tracking-tight">
+                            J & M
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- SUBTITLE: NOSSO CASAMENTO (Editable) -->
+                <div class="w-full flex justify-center mt-[-22px] pointer-events-auto">
+                    <h2 id="subheadingText" contenteditable="false" spellcheck="false" class="font-cinzel text-[12px] sm:text-[13px] tracking-[0.28em] gold-gradient-text font-bold uppercase px-3 py-0.5">
+                        NOSSO CASAMENTO
+                    </h2>
+                </div>
+
+                <!-- ARABESCO 2 (arabesco-cor2.jpg) Under NOSSO CASAMENTO -->
+                <div class="w-full flex justify-center mt-1">
+                    <img 
+                        src="arabesco-cor2.jpg" 
+                        alt="Arabesco Divisório" 
+                        class="h-[14px] sm:h-[16px] object-contain mix-blend-multiply pointer-events-none"
+                    />
+                </div>
+            </div>
+
+            <!-- LOWER SECTION: Com Amor, Nomes & Arabesco 1 -->
+            <div class="w-full pb-[6%] flex flex-col items-center text-center">
+                
+                <!-- TAGLINE: COM AMOR, (Editable) -->
+                <div class="w-full flex justify-center mb-0.5 pointer-events-auto">
+                    <p id="taglineText" contenteditable="false" spellcheck="false" class="font-cinzel text-[10px] sm:text-[11px] tracking-[0.25em] gold-gradient-text font-bold uppercase px-2 py-0.5">
+                        COM AMOR,
+                    </p>
+                </div>
+
+                <!-- COUPLE NAMES: Isabela & Murilo (Editable) -->
+                <div class="w-full flex justify-center pointer-events-auto">
+                    <h3 id="namesText" contenteditable="false" spellcheck="false" class="font-script text-4xl sm:text-5xl gold-gradient-text px-3 py-0.5 leading-tight">
+                        Isabela & Murilo
+                    </h3>
+                </div>
+
+                <!-- ARABESCO 1 (arabesco-cor1.jpg) Under Couple Names -->
+                <div class="w-full flex justify-center mt-1">
+                    <img 
+                        src="arabesco-cor1.jpg" 
+                        alt="Arabesco Inferior" 
+                        class="h-[18px] sm:h-[20px] object-contain mix-blend-multiply pointer-events-none"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. WAX SEAL INTERACTIVE CLICK HOTSPOT & HAND ICON (clique.jpg) -->
+        <div class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none" style="padding-top: 19%;">
+            <a 
+                href="https://convitedigital.blogspot.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                id="waxSealLink" 
+                title="Clique no selo para abrir o site"
+                class="pointer-events-auto relative flex flex-col items-center justify-center group focus:outline-none cursor-pointer"
+            >
+                <!-- Subtle Pulse Ring over Wax Seal -->
+                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-amber-500/40 pulse-ring pointer-events-none"></div>
+
+                <!-- Hand Click Icon Overlay (clique.jpg) -->
+                <div class="absolute -bottom-1 right-2 z-40 pointer-events-none animate-tap">
+                    <img 
+                        src="clique.jpg" 
+                        alt="Clique aqui" 
+                        class="w-8 sm:w-10 h-auto object-contain mix-blend-multiply drop-shadow-md"
+                    />
+                </div>
+            </a>
+        </div>
+
+    </main>
+
+    <script>
+        const editableIds = ['monogramText', 'subheadingText', 'taglineText', 'namesText'];
+        let isEditMode = false;
+
+        // Toggles interactive text editing on screen
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            
+            const body = document.body;
+            const editBtnText = document.getElementById('editBtnText');
+            const editIcon = document.getElementById('editIcon');
+            const editBadge = document.getElementById('editBadge');
+            const waxSealLink = document.getElementById('waxSealLink');
+
+            if (isEditMode) {
+                body.classList.add('editing-active');
+                editBtnText.innerText = 'Concluir Edição';
+                editIcon.className = 'fa-solid fa-check text-green-600';
+                editBadge.classList.remove('hidden');
+                editBadge.classList.add('flex');
+
+                // Disable seal redirection while editing texts
+                waxSealLink.style.pointerEvents = 'none';
+
+                editableIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.setAttribute('contenteditable', 'true');
+                    }
+                });
+
+                document.getElementById('monogramText').focus();
+
+            } else {
+                body.classList.remove('editing-active');
+                editBtnText.innerText = 'Editar Textos';
+                editIcon.className = 'fa-solid fa-pen text-amber-700';
+                editBadge.classList.add('hidden');
+                editBadge.classList.remove('flex');
+
+                waxSealLink.style.pointerEvents = 'auto';
+
+                editableIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.setAttribute('contenteditable', 'false');
+                    }
+                });
+
+                saveContent();
+            }
+        }
+
+        // Save customized texts in LocalStorage
+        function saveContent() {
+            editableIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    localStorage.setItem('wedding_invite_' + id, el.innerText);
+                }
+            });
+        }
+
+        // Load saved customized texts
+        function loadContent() {
+            editableIds.forEach(id => {
+                const saved = localStorage.getItem('wedding_invite_' + id);
+                const el = document.getElementById(id);
+                if (saved && el) {
+                    el.innerText = saved;
+                }
+            });
+        }
+
+        // Initialize listeners
+        window.addEventListener('DOMContentLoaded', () => {
+            loadContent();
+
+            // Prevent enter key newline break
+            editableIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            el.blur();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
